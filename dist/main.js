@@ -1,1 +1,1 @@
-console.log("Number : 888");
+(()=>{"use strict";console.log("Хайлт : pizza")})();
