@@ -1,32 +1,45 @@
-import Search from './model/Search';
-
 /*
- Search-с класс орж ирж байгаа. Тэгэхээр классын обьект үүсгэнэ.
- let search = new Search( )-энэ Search-ийн parameter-ээр нь байгуулагч функц рүү нь ямар аргумент дамжуулах юм бэ? түүнийгээ бичиж өгнө. Байгуулагч функц нь энэ constructor(query) тэр нь query -авч байгаа түүнийг энэ дамжуулж өгнө.
+Web app-ийн төлөв
+-Хайлтын query, үр дүн
+-Тухайн үзүүлж байгаа жор
+-Лайкласан жорууд
+-Захиалж байгаа жорын найрлагууд 
+гэх мэт олон хэрэгтэй өгөгдлүүдийг state-гэдэг нэг газар хадгална.Ингэснээр олон контроллер дотроос тухайн state-руу хандаад хэрэгтэй мэдээллээ авах боломжийг өгнө.
 
- let search = new Search('pizza'); энэ let search- обьект нь дотроо query-ийг хадгалаж байгаа мөн doSearch(search) функцийг нь дуудах юм бол result-аа бас дотроо хадгална.
+Одоо хайх товч дээр event Listener холбож өгье. Тэр event Listener-цаанаа манай контроллерыг дуудаж өгнө.
+
 */
 
-// let search = new Search('pizza');
-let search = new Search('broccoli');
+const state = {};
+const controlSearch = async () => {
+    // console.log('Submit дарагдлаа');
+    // 1. Вэбээс хайлтын түлхүүр үгийг гаргаж авна. 
+    const query = 'pizza';
+    
+    if(query) {
+         // 2. Шинээр хайлтын обьектийг үүсгэж state-рүүгээ хийнэ. (тухайн түлхүүр үгээр хайдаг)
+          state.search = new Search(query);
+         // 3. Хайлт хийхэд зориулж дэлгэцийг бэлтгэнэ.
+     
+     
+         // 4. Хайлтыг гүйцэтгэнэ.
+         await state.search.doSearch();
+     
+         // 3. Хайлтын үр дүнг дэлгэцэнд үзүүлнэ.
+         console.log(state.search.result);
+         
 
-search.doSearch().then(res => console.log(res));
-/*
-search.doSearch(); ингэж дуудах юм бол юу ч гарч ирэхгүй, учир нь зүгээр л хайгаад дотроо result-аа хадгалчихсан байгаа. Түүнийгээ  return this.result; хийж байгаа. 
-  async  doSearch(search) {
-        try {
-            let result = await axios('https://forkify-api.herokuapp.com/api/search?q=' + this.query);
-            // console.log(result);
-           this.result = result.data.recipes;
-           return this.result;
-        } catch(error) {
-            alert('Асуудал гарлаа : ' + error);
-        }
-        
-    };
+     }
+    
+};
 
-    Энд онолоо санахад async функцээс return --- хийгдсэн юм болгон promise буцаадаг. return this.result;  ингэж буцаасан харагдаж байгаа ч promise дотор хийж буцаадаг байгаа. Promise-аар ирсэн үр дүнг яаж авах билээ?
+document.querySelector('.search').addEventListener('submit', e => {
+    /*
 
-promise-ийн then гэдэг функцийг нь дуудах буюу амлалт нь биелэгдсэн бол гэдэг функцийг дуудна. 
+     энэ суман функцийн e => --- гэдэг parameter-ээр нь вэб дээрх submit event дамжигдаж орж ирнэ. Хайх гэдэг дээр дарахаар submit-гэдэг үйлдэл хийгдээд байгаа. form --нь default-аар submit-дарахаар дахин reload -хйигддэг байгаа. Тэгээд console.log('Submit дарагдлаа'); бичиг харагдаад алба болоод байгаа. Энэ default-зан чанарыг нь болиулах хэрэгтэй. 
+      e.preventDefault(); --- дуудаж default-оор reload-хийхийг нь болиулна.
+     */
 
-*/
+     e.preventDefault();
+     controlSearch();
+})
