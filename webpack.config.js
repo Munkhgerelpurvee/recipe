@@ -5,7 +5,7 @@ module.exports = {
   mode: 'none',
   entry: './src/js/index.js',
   devServer: {
-    static: './dist',
+    static: './docs',
   },
   plugins: [
       
@@ -15,8 +15,8 @@ module.exports = {
         })
     ],
     output: {
-      filename: 'main.js',
-      path: path.resolve(__dirname, 'dist'),
+      filename: 'js/main.js',
+      path: path.resolve(__dirname, 'docs'),
     },
   
 };
