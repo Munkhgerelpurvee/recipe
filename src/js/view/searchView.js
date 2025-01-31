@@ -39,7 +39,7 @@ export const getInput = () => elements.searchInput.value;
 
 // Бүх жорын массивыг хайхаас гадна яг тэддүгээр хуудас шүү гэдгийг хэлдэг болгоё
 
-export const renderRecipes = (recipes, currentPage = 1, resultPerPage = 10  ) => {
+export const renderRecipes = (recipes, currentPage = 1, resultPerPage = 10) => {
     // хайлтын үр дүнг хууудаслаж үзүүлэх
     // Page=2 , start=10, end =20
 const start = (currentPage -1) * resultPerPage;

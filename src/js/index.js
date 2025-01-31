@@ -1,6 +1,7 @@
 import Search from './model/Search';
 import { elements, renderLoader, clearLoader } from './view/base';
-import * as searchView from './view/searchView'
+import * as searchView from './view/searchView';
+import Recipe from './model/Recipe';
 
 /*
 Web app-ийн төлөв
@@ -66,3 +67,7 @@ if(btn) {
      //  searchView.clearSearchResult(); дээр очиж өмнөх товчийг цэвэрлэж өгнө
 }
 });
+
+
+const res = new Recipe(47746);
+res.getRecipe();
