@@ -1,5 +1,5 @@
 import Search from './model/Search';
-import { elements } from './view/base';
+import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView'
 
 /*
@@ -27,12 +27,13 @@ const controlSearch = async () => {
      
          searchView.clearSearchQeury();
          searchView.clearSearchResult();
+         renderLoader(elements.searchResultDiv)
          // 4. Хайлтыг гүйцэтгэнэ.
          await state.search.doSearch();
      
          // 5. Хайлтын үр дүнг дэлгэцэнд үзүүлнэ.
         //  console.log(state.search.result);
-
+         clearLoader();
         if(state.search.result === undefined) alert('Хайлтаар ийм илэрц алга!');
         else console.log(searchView.renderRecipes(state.search.result));
         
