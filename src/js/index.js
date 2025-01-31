@@ -35,7 +35,7 @@ const controlSearch = async () => {
         //  console.log(state.search.result);
          clearLoader();
         if(state.search.result === undefined) alert('Хайлтаар ийм илэрц алга!');
-        else console.log(searchView.renderRecipes(state.search.result));
+        else searchView.renderRecipes(state.search.result);
         
          
 
@@ -52,4 +52,17 @@ const controlSearch = async () => {
 
      e.preventDefault();
      controlSearch();
-})
+});
+
+elements.pageButtons.addEventListener('click', el => {
+const btn = el.target.closest('.btn-inline');
+if(btn) {
+
+     const goToPageNumber = parseInt(btn.dataset.goto, 10);
+     // Хэрвээ товч байх юм бол хайлтынхаа үр дүнг цэвэрлэнэ.
+     searchView.clearSearchResult();
+     // Дараагийн хуудас руу шилжүүлнэ
+     searchView.renderRecipes(state.search.result, goToPageNumber);
+     //  searchView.clearSearchResult(); дээр очиж өмнөх товчийг цэвэрлэж өгнө
+}
+});
