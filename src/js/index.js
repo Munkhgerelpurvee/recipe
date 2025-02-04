@@ -2,6 +2,7 @@ import Search from './model/Search';
 import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/Recipe';
+import { renderRecipe, clearRecipe} from './view/recipeView';
 
 
 
@@ -55,6 +56,7 @@ const controlSearch = async () => {
      
          searchView.clearSearchQeury();
          searchView.clearSearchResult();
+     //     Хайлт хийхэд эргэлддэг сум гаргах
          renderLoader(elements.searchResultDiv)
          // 4. Хайлтыг гүйцэтгэнэ.
          await state.search.doSearch();
@@ -118,18 +120,22 @@ console.log(id);
      state.recipe = new Recipe(id);
 
      //3. UI буюу дэлгэцийг бэлтгэнэ
+     clearRecipe();
+     renderLoader(elements.recipeDiv);
      //4.Жороо татаж авчирна.
           await  state.recipe.getRecipe();
      //5. Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
-
+     clearLoader();
      state.recipe.calcTime();
      state.recipe.calcHuniiToo();
 
      //6. Жороо дэлгэцэнд гаргана
 
-     console.log(state.recipe);
+     // console.log(state.recipe); (view-гээ ашиглаад дэлгэц дээр гаргана.)
+     renderRecipe(state.recipe);
 
   
 };
 
 window.addEventListener('hashchange', controlRecipe);
+window.addEventListener('load', controlRecipe);
