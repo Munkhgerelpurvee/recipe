@@ -3,7 +3,7 @@ import { elements } from "./base"
 // нэг жорыг дэлгэц дээр гаргаж өгдөг нэг функцтэй гэж үзье
 // Private function
 const renderRecipe = (recipe) => {
-    console.log(recipe);
+    // console.log(recipe);
     
     // console.log(recipe.title);
     const markup = `

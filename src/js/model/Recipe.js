@@ -39,5 +39,14 @@ export default class Recipe {
 
     };
        
+    calcTime() {
+      // Найрлага бүрт ойролцоогоор 5 минут зарцуулна
+      this.time = this.ingredients.length * 5;
+    };
+
+    // Хэдэн хүнд зориулагдсан орц вэ
+    calcHuniiToo() {
+      this.huniiToo = 4;
+    }
    
 }

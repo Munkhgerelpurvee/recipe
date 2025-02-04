@@ -6,6 +6,43 @@ import Recipe from './model/Recipe';
 
 
 const state = {};
+/**
+ * 
+ * MVC 
+ * model ===> controller <=== view
+ * 
+ * controller гэдэг нь энэ index.js-хэсэг дотор байгаа model and view хоёрыг хооронд нь холбож өгдөг зүйл юм.
+ * 
+ * const controlRecipe = () => {
+     // 1. URL-аас ID-ийг салгаж авна.
+     // 2. Жорын моделийг үүсгэж өгнө (lesson120 дээр хийсэн)
+     //3. UI буюу дэлгэцийг бэлтгэнэ
+     //4.Жороо татаж авчирна.
+     //5. Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
+     //6. Жороо дэлгэцэнд гаргана
+
+Энд дэлгэц гэсэн дээр нь view-ийг ашиглана харин жор гэсэн дээр нь моделийг ашиглана.
+
+http://localhost:8080/#35478  энэ хэсгээс id-салгаж авахдаа энэ хэсгийг window дотор location гэж property байдаг тэр нь энэ хаягийг зааж байдаг байгаа.
+//   
+
+
+Нэг жор дээр дарахад #35478  гарч байгаа нь searchView дээр гарч байгаа нэг ширхэг жор буюу li дотор а-link-ээр хуудас дотор шижилт хийхэд # -ийг ашигладаг.
+
+href="#${recipe.recipe_id} энэ hash-солигдох болгонд window object дотор event үүсэж байдаг. Энэ hashchange event-ийг олж аваад, энэ http://localhost:8080/#35478  энэ URL-ээс id-ийг нь салгаж аваад тухайн id-ийг Recipe.js-model-руу өгч тухайн жорыг id-гаар нь татаж авчирч дэлгэц дээр гаргана.
+
+<a class="results__link" href="#${recipe.recipe_id}">
+http://localhost:8080/#35478 --гарч байгаа нь 
+hash: "#35477"
+  
+}
+ * 
+ */
+
+
+/**
+ * Хайлтын контроллер
+ */
 const controlSearch = async () => {
     // console.log('Submit дарагдлаа');
     // 1. Вэбээс хайлтын түлхүүр үгийг гаргаж авна. 
@@ -58,6 +95,41 @@ if(btn) {
 }
 });
 
+/**
+ * Жорын контроллер
+ */
+// const res = new Recipe(47746);
+// res.getRecipe();
 
-const res = new Recipe(47746);
-res.getRecipe();
+
+const controlRecipe =  async () => {
+     // 1. URL-аас ID-ийг салгаж авна.
+const id = window.location.hash.replace('#', '')
+
+/*
+const id = window.location.hash; 
+console.log(id);
+#2ec050 console.log(id); Одоо бидэнд эндээс урдах #-хэрэггүй ард талын тоо нь хэрэгтэй байгаа түүнийг авна. 
+#2ec050 - нь string тул replace() функц ашиглан энэ #-ийг нь хоосон тэмдэгтээр солиод -id-гаа гаргаж авч болно.
+*/
+console.log(id);
+
+     // 2. Жорын моделийг үүсгэж өгнө (lesson120 дээр хийсэн - үүнийг state-руу хийж өгнө)
+     state.recipe = new Recipe(id);
+
+     //3. UI буюу дэлгэцийг бэлтгэнэ
+     //4.Жороо татаж авчирна.
+          await  state.recipe.getRecipe();
+     //5. Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
+
+     state.recipe.calcTime();
+     state.recipe.calcHuniiToo();
+
+     //6. Жороо дэлгэцэнд гаргана
+
+     console.log(state.recipe);
+
+  
+};
+
+window.addEventListener('hashchange', controlRecipe);
