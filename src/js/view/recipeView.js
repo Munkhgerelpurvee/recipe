@@ -13,6 +13,22 @@ const renderNairlaga = (orts) =>  `
                     </li>
     
     `
+    /*
+    Lesson123
+     sideBar -дээр ихэвхитэй болсон ганц жорыг highLight -хийх буюу бүдэг өнгөтэй болгож өгнө.
+     <a class="results__link" href="#${recipe.recipe_id}"> үүний класс руу нь result__link--active гэдэг background-ийг нь бүдэг саарал өнгөтэй болгодог классыг л нэмж өгнө.
+    */
+
+     export const highLightSelectedRecipe = (id) => {
+        // nodeList ирнэ түүнийг массив болгож бүх элементээр нв давталт гүйлгэнэ.
+       const arr = Array.from(document.querySelectorAll('.results__link'));
+
+       arr.forEach(el => el.classList.remove('results__link--active'));
+        // 
+        const DomObject = document.querySelector(`a[href*="${id}"]`)
+        // if(DomObject) нь  true буюу id-байх юм бол гэдэг нөхцөл тавьж өгнө
+        if(DomObject) DomObject.classList.add('results__link--active');
+     }
 
 
 
@@ -23,34 +39,7 @@ export const clearRecipe = () => {
     elements.recipeDiv.innerHTML = '';
 };
 
-/*
-ingredients-гэдэг 
-массив дотор олон жорууд байгаа 
- түүнд давталт хийгээд түүнийг li-ийн оронд гаргана.
-  ${recipe.ingredients.map(el => renderNairlaga(el))}
-
-  renderNairlaga-гэдэг функцийг дуудаж өгнө
-
-Одоо refresh хийхэд дэлгэц дээрх орц алга болоод байна. Тэгэхээр window-ийн load-гэдэг event -нь refresh хийхэд болдог байгаа. Үүнийг index.js- дээр хийж өгнө.
-
-window.addEventListener('load', controlRecipe);
-
-Одоо цаашаа зүрхэн дээр дарахад like-гэдэг хэсэг рүү оруулж ирнэ. Browser нь storage гэдэг мэдээллийг түр хадгалдаг өгөгдлийн сан буюу баазтай байдаг түүнд нь like-ийг хадгална. Цаана сэрвэр дээрээ хадгалахгүй байгаа.
-Буцаад liked болсноо харахад storage-ээс уншиж гаргаж ирж харна. Тэгэхээр browser дээр хадгалагпах юм байна. Мөн сагсанд хийх хэсэг хийгээд манай төсөл дуусах болно.
-*/
-
-
-
 export const renderRecipe = (recipe) => {
-    // энэ жорыг дэлгэцэнд гаргаж үзүүлнэ
-    // this.image_url = result.data.recipe.image_url
-    // this.ingredients = result.data.recipe.ingredients
-    // this.publisher = result.data.recipe.publisher;
-    // this.publisher_url = result.data.recipe.publisher_url
-    // this.recipe_id = result.data.recipe.recipe_id
-    // this.title = result.data.recipe.title
-    // this.social_rank = result.data.recipe.social_rank
-    // this.source_url = result.data.recipe.source_url
 const html = `
 
  <figure class="recipe__fig">

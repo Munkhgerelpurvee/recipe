@@ -2,7 +2,7 @@ import Search from './model/Search';
 import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/Recipe';
-import { renderRecipe, clearRecipe} from './view/recipeView';
+import { renderRecipe, clearRecipe, highLightSelectedRecipe} from './view/recipeView';
 
 
 
@@ -122,6 +122,8 @@ console.log(id);
      //3. UI буюу дэлгэцийг бэлтгэнэ
      clearRecipe();
      renderLoader(elements.recipeDiv);
+     highLightSelectedRecipe(id);
+
      //4.Жороо татаж авчирна.
           await  state.recipe.getRecipe();
      //5. Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
