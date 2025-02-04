@@ -3,17 +3,7 @@ import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/Recipe';
 
-/*
-Web app-ийн төлөв
--Хайлтын query, үр дүн
--Тухайн үзүүлж байгаа жор
--Лайкласан жорууд
--Захиалж байгаа жорын найрлагууд 
-гэх мэт олон хэрэгтэй өгөгдлүүдийг state-гэдэг нэг газар хадгална.Ингэснээр олон контроллер дотроос тухайн state-руу хандаад хэрэгтэй мэдээллээ авах боломжийг өгнө.
 
-Одоо хайх товч дээр event Listener холбож өгье. Тэр event Listener-цаанаа манай контроллерыг дуудаж өгнө.
-
-*/
 
 const state = {};
 const controlSearch = async () => {
