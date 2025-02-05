@@ -5,6 +5,7 @@ import Recipe from './model/Recipe';
 import { renderRecipe, clearRecipe, highLightSelectedRecipe} from './view/recipeView';
 import Basket from './model/Basket';
 import * as basketView from './view/basketView';
+import Like from './model/Like';
 
 
 
@@ -174,34 +175,50 @@ const id = window.location.hash.replace('#', '')
 })
 }
 
+ /**
+ * Like контроллер (Зүрх)
+ */
+const controlLike = () => {
+     // console.log('Like control clicked...');
+     // Зүрх дарагдсан жорыг авч like.js модел руу хийх
+     // 1.Лайкийн моделийг үүсгэнэ. (if(state.likes === false) --- like нь хоосон бол шинээр үүсгэ)
+     if(!state.likes)state.likes = new Like();
+
+     // 2.Одоо харагдаж байгаа жорын id-ийг олж авах
+     const currentRecipeId = state.recipe.id;
+
+
+     // 3.Энэ id-тай жорыг  лайк -хийсэн эсэхийг шалгах
+     if(state.likes.isLiked(currentRecipeId)) {
+          // 4.Лайк-хийсэн бол лайк хийснийг нь болиулна.
+          state.likes.deleteLike(currentRecipeId)
+          // console.log('Like хийсэн байна');
+          console.log(state.likes);
+          
+
+     } else {
+
+          // 5.Лайк-хийгээгүй бол лайк хийнэ
+          // console.log('Like хийгээгүй байна');
+          state.likes.addLike(
+               currentRecipeId,
+               state.recipe.tiitle,
+               state.recipe.publisher,
+               state.recipe.image_url );
+          }
+          console.log(state.likes);
+     
+};
+
+
+
  elements.recipeDiv.addEventListener('click', (e) => {
 //   console.log('click ...');
-/*
-
-<button class="btn-small recipe__btn">
-                    <svg class="search__icon">
-                        <use href="img/icons.svg#icon-shopping-cart"></use>
-                    </svg>
-                    <span>САГСАНД ХИЙХ</span>
-                </button> товчинд дарахад button, svg and span гээд 3 юм барих ёстой юм уу гэдэг асуудал гарч байна. Ингэхийн тулд recipe__btn---- гэсэн хамгийн гаднах  button дээр байгаа болон түүнд доторх  ямар ч класстай юм байсан гэдэг нөхцлийг бичиж болж байвал товчны зураг болон үгэн дээр болон үгнээс гаднах хүрээ зэрэгт дарагдсан тохиолдолд бүгдийг барьж авч чадна.
-Ингэж бичсэн тохиолдолд яг товчны хүрээн дээр нь л дарахад ганцхан click-хийгдэж болж байна.
-      if(e.target.matches('.recipe__btn')) {
-     console.log('button basket');
-     
-}
- } )
-Одоо тэгэхээр css-классаар хийсэн select- ээ өргөжүүлнэ.
- '.recipe__btn, .recipe__btn * ' ийм класстай элемент болон ийм класстай элемент -ийн дотор байгаа бүх юмнуудын хувьд үүнийг хэвлэ гэж өргөтгөж өгнө.
- if(e.target.matches('.recipe__btn, .recipe__btn * ')) {
-     console.log('button basket');
-     
-}
- } )
-*/
-
 if(e.target.matches('.recipe__btn, .recipe__btn * ')) {
      controlBasket();
      
+} else if(e.target.matches('.recipe__love, .recipe__love *')) {
+     controlLike();
 }
  } )
 
@@ -224,7 +241,7 @@ elements.shoppingBasket.addEventListener('click', e => {
      state.basket.deleteItem(id);
 
      /*
-     id-тай найрлагыг моделоос устгахыг түр туршиж үзэхийн тулд дээр үүсгэсэн моделоо window обьектод хийж өгөөд console дээр дуудаж устгаж байгааг шалгах боломжтой байгаа.
+     id-тай найрлагыг моделоос устгахыг түр туршиж үзэхийн тулд дээр үүсгэсэн моделоо window обьектод хийж өгөөд console дээр дуудаж устгаж байгааг шалгах боломжтой байгаа
      window.tt = state.basket;
      */
      // Дэлгэцээс ийм id-тай найрлагыг олж бас устгана
