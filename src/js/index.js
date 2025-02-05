@@ -155,18 +155,22 @@ const id = window.location.hash.replace('#', '')
      // Найрлаганы иоделийг үүсгэнэ (Basket model)
 
      state.basket = new Basket();
+     /*
+   window.tt = state.basket; гэж түр зуур console дээр тестлэх зорилгоор моделоо window object дээр tt- гэсэн хувьсагчинд дуудаж console дээр window.tt-- гэж дуудаад дараа нь найрлагын эхний элементийг нь устагх улаан товч дээр устгаж үзээд дараа нь дахин window.tt-- дахин дуудаж эхний элемеэнт устсан эсэхийг тест хийж харцгаая.
+     */
+     window.tt = state.basket;
      // Өмнө нь харагдаж байсан найрлагуудыг дэлгэцээс цэвэрлэнэ.
      basketView.clearItems();
 
 
      // Уг иодел руу одоо харагдаж байгаа жорны бүх найрлагыг авч хийнэ. 
   state.recipe.ingredients.forEach(n => {
-     // model Тухайн найрлагыг модел руу хийнэ( Модел руу хийснээр дараа нь хэрэггүй буюу өөрт байгаа найрлагаа авах шаардлагагүй буюу устгаж өгнө)
-     state.basket.addItem(n);
-     // console.log('========> ' + n);
+         // model Тухайн найрлагыг модел руу хийнэ
+    const basketItem =  state.basket.addItem(n);
+
      
      // view Тухайн найрлагыг дэлгэцэнд гаргана.
-     basketView.renderItem(n)
+     basketView.renderItem(basketItem)
 })
 }
 
@@ -206,3 +210,25 @@ if(e.target.matches('.recipe__btn, .recipe__btn * ')) {
 
 Одоо Миний сагс гэсэн хэсэгт найрлагуудаа гаргаж харуулахын тулд сагсны view -хэсгээр гаргах тул basketView -хэсгийг бичиж өгнө.
 */
+
+elements.shoppingBasket.addEventListener('click', e => {
+     // console.log('Clicked shopping basket');
+     // const obj = e.target.closest('.shopping__item');
+     // obj.dataset.itemid;
+     // console.log(obj);
+     // console.log(obj.dataset.itemid);
+// Click хийсэн li-элементийн data-itemid аттрибутыг шүүж гаргаж авах
+      const id = e.target.closest('.shopping__item').dataset.itemid;
+
+     //  Дээрх олдсон id-тай найрлагыг моделоос устгана.
+     state.basket.deleteItem(id);
+
+     /*
+     id-тай найрлагыг моделоос устгахыг түр туршиж үзэхийн тулд дээр үүсгэсэн моделоо window обьектод хийж өгөөд console дээр дуудаж устгаж байгааг шалгах боломжтой байгаа.
+     window.tt = state.basket;
+     */
+     // Дэлгэцээс ийм id-тай найрлагыг олж бас устгана
+     basketView.deleteItem(id);
+
+     
+})
