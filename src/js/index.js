@@ -3,6 +3,8 @@ import { elements, renderLoader, clearLoader } from './view/base';
 import * as searchView from './view/searchView';
 import Recipe from './model/Recipe';
 import { renderRecipe, clearRecipe, highLightSelectedRecipe} from './view/recipeView';
+import Basket from './model/Basket';
+import * as basketView from './view/basketView';
 
 
 
@@ -107,37 +109,100 @@ if(btn) {
 const controlRecipe =  async () => {
      // 1. URL-аас ID-ийг салгаж авна.
 const id = window.location.hash.replace('#', '')
+     // URL-дээр id-байгаа эсэхийг шалгана
+    if(id) {
+         
+              // 2. Жорын моделийг үүсгэж өгнө (lesson120 дээр хийсэн - үүнийг state-руу хийж өгнө)
+              state.recipe = new Recipe(id);
+         
+              //3. UI буюу дэлгэцийг бэлтгэнэ
+              clearRecipe();
+              renderLoader(elements.recipeDiv);
+              highLightSelectedRecipe(id);
+         
+              //4.Жороо татаж авчирна.
+                   await  state.recipe.getRecipe();
+              //5. Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
+              clearLoader();
+              state.recipe.calcTime();
+              state.recipe.calcHuniiToo();
+         
+              //6. Жороо дэлгэцэнд гаргана
+         
+              // console.log(state.recipe); (view-гээ ашиглаад дэлгэц дээр гаргана.)
+              renderRecipe(state.recipe);
 
-/*
-const id = window.location.hash; 
-console.log(id);
-#2ec050 console.log(id); Одоо бидэнд эндээс урдах #-хэрэггүй ард талын тоо нь хэрэгтэй байгаа түүнийг авна. 
-#2ec050 - нь string тул replace() функц ашиглан энэ #-ийг нь хоосон тэмдэгтээр солиод -id-гаа гаргаж авч болно.
-*/
-console.log(id);
 
-     // 2. Жорын моделийг үүсгэж өгнө (lesson120 дээр хийсэн - үүнийг state-руу хийж өгнө)
-     state.recipe = new Recipe(id);
-
-     //3. UI буюу дэлгэцийг бэлтгэнэ
-     clearRecipe();
-     renderLoader(elements.recipeDiv);
-     highLightSelectedRecipe(id);
-
-     //4.Жороо татаж авчирна.
-          await  state.recipe.getRecipe();
-     //5. Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
-     clearLoader();
-     state.recipe.calcTime();
-     state.recipe.calcHuniiToo();
-
-     //6. Жороо дэлгэцэнд гаргана
-
-     // console.log(state.recipe); (view-гээ ашиглаад дэлгэц дээр гаргана.)
-     renderRecipe(state.recipe);
+    }
 
   
 };
+// Доорх кодыг арай илүү хялбарчлан бичвэл
+// window.addEventListener('hashchange', controlRecipe);
+// window.addEventListener('load', controlRecipe);
+ ['hashchange', 'load'].forEach( event => window.addEventListener(event, controlRecipe) );
 
-window.addEventListener('hashchange', controlRecipe);
-window.addEventListener('load', controlRecipe);
+ /**
+ * Найрлаганы контроллер (сагсны)
+ */
+
+  /**
+ * Найрлаганы контроллер маань сагсанд хийх товч дарагдахад уг контроллер ажиллаж орцуудыг миний сагсны модел руу хийж өгнө. Гэтэл апп анх эхлэхэд манай сагсанд хийх товч харагдахгүй буюу байхгүй байгаа. Тиймээс уг товчны гаднах том div -дээр нь <div class="recipe">
+ *  event Listener тавьж өгвөл тухайн div-дээр хаана дарагдсан ч баригдана. Тэгээд дараа нь яг тухайн товчны зураг дээр дарагдахад буюу click-хийхэд event listener-барьж авч хариу үйлдэл үзүүлдэг болгоно.
+ */
+
+ const controlBasket = () => {
+     // Найрлаганы иоделийг үүсгэнэ (Basket model)
+
+     state.basket = new Basket();
+     // Өмнө нь харагдаж байсан найрлагуудыг дэлгэцээс цэвэрлэнэ.
+     basketView.clearItems();
+
+
+     // Уг иодел руу одоо харагдаж байгаа жорны бүх найрлагыг авч хийнэ. 
+  state.recipe.ingredients.forEach(n => {
+     // model Тухайн найрлагыг модел руу хийнэ( Модел руу хийснээр дараа нь хэрэггүй буюу өөрт байгаа найрлагаа авах шаардлагагүй буюу устгаж өгнө)
+     state.basket.addItem(n);
+     // console.log('========> ' + n);
+     
+     // view Тухайн найрлагыг дэлгэцэнд гаргана.
+     basketView.renderItem(n)
+})
+}
+
+ elements.recipeDiv.addEventListener('click', (e) => {
+//   console.log('click ...');
+/*
+
+<button class="btn-small recipe__btn">
+                    <svg class="search__icon">
+                        <use href="img/icons.svg#icon-shopping-cart"></use>
+                    </svg>
+                    <span>САГСАНД ХИЙХ</span>
+                </button> товчинд дарахад button, svg and span гээд 3 юм барих ёстой юм уу гэдэг асуудал гарч байна. Ингэхийн тулд recipe__btn---- гэсэн хамгийн гаднах  button дээр байгаа болон түүнд доторх  ямар ч класстай юм байсан гэдэг нөхцлийг бичиж болж байвал товчны зураг болон үгэн дээр болон үгнээс гаднах хүрээ зэрэгт дарагдсан тохиолдолд бүгдийг барьж авч чадна.
+Ингэж бичсэн тохиолдолд яг товчны хүрээн дээр нь л дарахад ганцхан click-хийгдэж болж байна.
+      if(e.target.matches('.recipe__btn')) {
+     console.log('button basket');
+     
+}
+ } )
+Одоо тэгэхээр css-классаар хийсэн select- ээ өргөжүүлнэ.
+ '.recipe__btn, .recipe__btn * ' ийм класстай элемент болон ийм класстай элемент -ийн дотор байгаа бүх юмнуудын хувьд үүнийг хэвлэ гэж өргөтгөж өгнө.
+ if(e.target.matches('.recipe__btn, .recipe__btn * ')) {
+     console.log('button basket');
+     
+}
+ } )
+*/
+
+if(e.target.matches('.recipe__btn, .recipe__btn * ')) {
+     controlBasket();
+     
+}
+ } )
+
+
+/*
+
+Одоо Миний сагс гэсэн хэсэгт найрлагуудаа гаргаж харуулахын тулд сагсны view -хэсгээр гаргах тул basketView -хэсгийг бичиж өгнө.
+*/
