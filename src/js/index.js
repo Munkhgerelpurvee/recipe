@@ -6,10 +6,13 @@ import { renderRecipe, clearRecipe, highLightSelectedRecipe} from './view/recipe
 import Basket from './model/Basket';
 import * as basketView from './view/basketView';
 import Like from './model/Like';
+import * as likesView from './view/likesView'
 
 
 
 const state = {};
+// App эхлэх үед like-menu-ийг хаах
+likesView.toggleLikeMenu(0);
 /**
  * 
  * MVC 
@@ -109,7 +112,9 @@ if(btn) {
 
 const controlRecipe =  async () => {
      // 1. URL-аас ID-ийг салгаж авна.
-const id = window.location.hash.replace('#', '')
+const id = window.location.hash.replace('#', '');
+     // 1.Лайкийн моделийг үүсгэнэ. (if(state.likes === false) --- like нь хоосон бол шинээр үүсгэ)
+     if(!state.likes)state.likes = new Like();
      // URL-дээр id-байгаа эсэхийг шалгана
     if(id) {
          
@@ -131,7 +136,7 @@ const id = window.location.hash.replace('#', '')
               //6. Жороо дэлгэцэнд гаргана
          
               // console.log(state.recipe); (view-гээ ашиглаад дэлгэц дээр гаргана.)
-              renderRecipe(state.recipe);
+              renderRecipe(state.recipe, state.likes.isLiked(id));
 
 
     }
@@ -191,22 +196,39 @@ const controlLike = () => {
      // 3.Энэ id-тай жорыг  лайк -хийсэн эсэхийг шалгах
      if(state.likes.isLiked(currentRecipeId)) {
           // 4.Лайк-хийсэн бол лайк хийснийг нь болиулна.
-          state.likes.deleteLike(currentRecipeId)
+          state.likes.deleteLike(currentRecipeId);
+          //  Харагдаж байгаа like Цэснээс устгана(Menu дээрх зүрхнээс устгана)
+          likesView.deleteLike(currentRecipeId);
+          // Like товчны лайкалсан байдлыг болиулах
+          likesView.toggleLikeBtn(false);
           // console.log('Like хийсэн байна');
-          console.log(state.likes);
+          // console.log(state.likes);
           
 
      } else {
 
           // 5.Лайк-хийгээгүй бол лайк хийнэ
           // console.log('Like хийгээгүй байна');
-          state.likes.addLike(
+       const newLike = state.likes.addLike(
                currentRecipeId,
                state.recipe.tiitle,
                state.recipe.publisher,
                state.recipe.image_url );
-          }
-          console.log(state.likes);
+               // Энд шинээр үүссэн Like-ийг render хийнэ.
+               /*
+               likesView.renderLike(newLike); энд newLike-ийг яаж авах вэ гэхлээр манай addLike функц маань үүссэн like-аа буцааж байгаа. 
+               */
+          //     Like цэсэнд энэ лайкыг оруулах
+               likesView.renderLike(newLike);
+                  // Like товчны лайкалсан байдлыг like-хийсэн болгох
+               likesView.toggleLikeBtn(true);
+
+          };
+          // console.log(state.likes);
+
+          // Like хийсэн хийгээгүй аль ч тохиолдолд дуудах тул like-нөхцлийн дотор бичихгүй тусад нь хамгийн доор бичив. Аргументаар нь хэдэн ширхэг like-байгаа, байхгүй эсэхийг дамжуулна.
+
+          likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
      
 };
 

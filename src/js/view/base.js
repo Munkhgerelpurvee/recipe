@@ -5,7 +5,9 @@ export const elements = {
     searchResultDiv:document.querySelector('.results'),
     pageButtons:document.querySelector('.results__pages'),
    recipeDiv:document.querySelector('.recipe'),
-   shoppingBasket: document.querySelector('.shopping__list')
+   shoppingBasket: document.querySelector('.shopping__list'),
+   likesMune:document.querySelector('.likes__field'),
+   likesListMune:document.querySelector('.likes__list'),
     
 
 };

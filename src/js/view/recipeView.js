@@ -25,7 +25,7 @@ const renderNairlaga = (orts) =>  `
 
        arr.forEach(el => el.classList.remove('results__link--active'));
         // 
-        const DomObject = document.querySelector(`a[href*="${id}"]`)
+        const DomObject = document.querySelector(`.results__link[href*="${id}"]`)
         // if(DomObject) нь  true буюу id-байх юм бол гэдэг нөхцөл тавьж өгнө
         if(DomObject) DomObject.classList.add('results__link--active');
      }
@@ -39,7 +39,7 @@ export const clearRecipe = () => {
     elements.recipeDiv.innerHTML = '';
 };
 
-export const renderRecipe = (recipe) => {
+export const renderRecipe = (recipe, isLiked) => {
 const html = `
 
  <figure class="recipe__fig">
@@ -79,7 +79,7 @@ const html = `
                 </div>
                 <button class="recipe__love">
                     <svg class="header__likes">
-                        <use href="img/icons.svg#icon-heart-outlined"></use>
+                        <use href="img/icons.svg#icon-heart${isLiked ? "" : '-outlined'}"></use>
                     </svg>
                 </button>
             </div>
