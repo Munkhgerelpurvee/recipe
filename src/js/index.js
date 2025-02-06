@@ -11,8 +11,7 @@ import * as likesView from './view/likesView'
 
 
 const state = {};
-// App эхлэх үед like-menu-ийг хаах
-likesView.toggleLikeMenu(0);
+
 /**
  * 
  * MVC 
@@ -113,8 +112,7 @@ if(btn) {
 const controlRecipe =  async () => {
      // 1. URL-аас ID-ийг салгаж авна.
 const id = window.location.hash.replace('#', '');
-     // 1.Лайкийн моделийг үүсгэнэ. (if(state.likes === false) --- like нь хоосон бол шинээр үүсгэ)
-     if(!state.likes)state.likes = new Like();
+     
      // URL-дээр id-байгаа эсэхийг шалгана
     if(id) {
          
@@ -147,6 +145,21 @@ const id = window.location.hash.replace('#', '');
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
  ['hashchange', 'load'].forEach( event => window.addEventListener(event, controlRecipe) );
+ window.addEventListener('load', e => {
+     /*
+     дөнгөж апп ачаалангуут  window-ийн load дуудагдана. Тиймээс энд эхлэнгүүт like--ийн модел үүсгэж байгааг дуудаж өгөх хэрэгтэй.
+     */
+    // 1.Апп дөнгөж ачаалагдахад Лайкийн моделийг үүсгэнэ. (if(state.likes === false) --- like нь хоосон бол шинээр үүсгэ)
+    if(!state.likes)state.likes = new Like();
+    // App эхлэх үед like-menu-ийг гаргах эсэхийг шийдэх
+     likesView.toggleLikeMenu(state.likes.getNumberOfLikes());
+     // localStorage- дотор like байвал тэдгээрийг цэсэнд нэмж харуулна.
+     /*
+ state.likes--- энэ бол манай классын обьект юм.  state.likes.likes ---2 дахь like нь энэ юм.
+ if(!this.likes) this.likes = [];
+     */
+   state.likes.likes.forEach(el => likesView.renderLike(el));
+ })
 
  /**
  * Найрлаганы контроллер (сагсны)
@@ -271,3 +284,7 @@ elements.shoppingBasket.addEventListener('click', e => {
 
      
 })
+
+/*
+Хэрхэн localStorage дээр Likes модел дээр массив байдлаар хадгалсан байгаа like-уудыг байрлуулах вэ, Тэгэхийн тулд массиваа string -болгоод хийнэ. Ийм байдлаар dataBase-үгүйгээр өөрийн browser дээр өгөгдлөө байрлуулсан апп хийх боломжтой. Энэ нь таныг устгахаас нааш алга болохгүй байж л байна.
+*/
