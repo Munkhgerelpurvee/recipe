@@ -224,7 +224,7 @@ const controlLike = () => {
           // console.log('Like хийгээгүй байна');
        const newLike = state.likes.addLike(
                currentRecipeId,
-               state.recipe.tiitle,
+               state.recipe.title,
                state.recipe.publisher,
                state.recipe.image_url );
                // Энд шинээр үүссэн Like-ийг render хийнэ.
